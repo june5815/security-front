@@ -21,8 +21,8 @@ export default function ResidentSignup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const {data: apartments, updateParams: updateApartmentParams, params: apartmentsParams} = useApartmentStore();
-  const [ selectedApartment, setSelectedApartment ] = useState<ApartmentsDto | undefined>();
+  const { data: apartments, updateParams: updateApartmentParams, params: apartmentsParams } = useApartmentStore();
+  const [selectedApartment, setSelectedApartment] = useState<ApartmentsDto | undefined>();
 
   const [buildingOptions, setBuildingOptions] = useState<{ label: string; value: string }[]>([]);
   const [hoOptions, setUnitOptions] = useState<{ label: string; value: string }[]>([]);
@@ -41,10 +41,10 @@ export default function ResidentSignup() {
   useEffect(() => {
     if (selectedApartment) {
       setBuildingOptions(
-        selectedApartment.buildings.map(building => ({label: `${building}동`, value: String(building)}))
+        selectedApartment.buildings.map(building => ({ label: `${building}동`, value: String(building) }))
       )
       setUnitOptions(
-        selectedApartment.units.map(unit => ({label: `${unit}호`, value: String(unit)}))
+        selectedApartment.units.map(unit => ({ label: `${unit}호`, value: String(unit) }))
       )
       setValue('apartmentId', selectedApartment.id);
     }
@@ -61,6 +61,7 @@ export default function ResidentSignup() {
         }
       }
       await createResidentUser(request);
+      alert('입주민 가입 신청이 완료되었습니다.');
       router.replace('/');
     } catch (error) {
       if (isAxiosError(error)) {
@@ -161,7 +162,7 @@ export default function ResidentSignup() {
                 </label>
                 <SearchApartment
                   searchKeyword={apartmentsParams.searchKeyword}
-                  onChangeSearchKeyword={(val) => updateApartmentParams({searchKeyword: val})}
+                  onChangeSearchKeyword={(val) => updateApartmentParams({ searchKeyword: val })}
                   selectedApartment={selectedApartment}
                   onSelect={setSelectedApartment}
                   apartmentList={apartments}

@@ -1,4 +1,3 @@
-import axiosInstance from './client';
 import apiClient from './client';
 import type {
   SuperAdminSignupRequest,
