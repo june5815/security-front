@@ -1,1 +1,79 @@
-node_modules
+# dependencies
+node_modules/
+
+# production
+/dist
+/build
+
+# misc
+.DS_Store
+.env
+.env.*
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# test coverage
+coverage/
+
+# next.js
+.next/
+
+# vercel
+.vercel/
+
+# storybook
+out/
+.storybook/
+
+# logs
+logs
+*.log
+
+# parcel-bundler
+.cache/
+.parcel-cache/
+
+# typescript
+*.tsbuildinfo
+
+# eslint
+.eslintcache
+
+# optional npm cache directory
+.npm
+
+# optional stylelint cache
+.stylelintcache
+
+# optional REPL history
+.node_repl_history
+
+# dotenv environment variables file
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# ignore all md files except readme.md
+*.md
+!README.md
+!readme.md
