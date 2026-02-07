@@ -1,8 +1,8 @@
-import apiClient from './client';
+import apiClient from "./client";
 import type {
   NotificationFindAllPageResponse,
   FindNotificationsParams,
-} from '@/lib/types';
+} from "@/lib/types";
 
 /**
  * 알림 목록 조회
@@ -17,10 +17,15 @@ import type {
  * console.log(notifications.data); // NotificationDto[]
  * ```
  */
-export const getNotifications = async (params: FindNotificationsParams): Promise<NotificationFindAllPageResponse> => {
-  const response = await apiClient.get<NotificationFindAllPageResponse>('/notifications', {
-    params,
-  });
+export const getNotifications = async (
+  params: FindNotificationsParams,
+): Promise<NotificationFindAllPageResponse> => {
+  const response = await apiClient.get<NotificationFindAllPageResponse>(
+    "/notifications",
+    {
+      params,
+    },
+  );
   return response.data;
 };
 
