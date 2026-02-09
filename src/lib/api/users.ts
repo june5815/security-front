@@ -174,11 +174,7 @@ export const updateMyAvatar = async (file: File): Promise<void> => {
   const formData = new FormData();
   formData.append('avatarImage', file);
 
-  await apiClient.patch<void>('/users/me/avatar', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  await apiClient.patch<void>('/users/me/avatar', formData);
 };
 
 /**
