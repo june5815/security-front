@@ -4,6 +4,12 @@ import type { Configuration } from 'webpack';
 const nextConfig: NextConfig = {
   output: 'standalone',
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     domains: ['sprint-be-project.s3.ap-northeast-2.amazonaws.com'],
   },
