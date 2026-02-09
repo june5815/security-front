@@ -1,0 +1,52 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker Image
+        run: |
+          # 빌드 시점에 API 주소 주입 (--build-arg)
+          docker build \
+            --build-arg NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }} \
+            -t ${{ secrets.ECR_SERVER_URI }}:frontend .
+          docker push ${{ secrets.ECR_SERVER_URI }}:frontend
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # 1. 모든 이미지 변수 설정 (docker-compose가 에러 나지 않게)
+            export SERVER_IMAGE_NAME=${{ secrets.ECR_SERVER_URI }}:latest
+            export MIGRATOR_IMAGE_NAME=${{ secrets.ECR_SERVER_URI }}:migrator
+            export FRONTEND_IMAGE_NAME=${{ secrets.ECR_SERVER_URI }}:frontend
+            
+            # 2. ECR 로그인
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_SERVER_URI }}
+            
+            # 3. 프론트엔드 컨테이너만 업데이트 및 재시작
+            docker-compose -f docker-compose.yml pull client
+            docker-compose -f docker-compose.yml up -d client
+            
+            # 4. 이미지 정리
+            docker image prune -f

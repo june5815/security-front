@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 import type { Configuration } from 'webpack';
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   images: {
     domains: ['sprint-be-project.s3.ap-northeast-2.amazonaws.com'],
