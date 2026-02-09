@@ -1,4 +1,4 @@
-import apiClient from './client';
+import apiClient from "./client";
 import type {
   ComplaintFindAllPageResponse,
   ComplaintsCreateRequest,
@@ -6,7 +6,7 @@ import type {
   ComplaintsUpdateRequest,
   ComplaintStatusUpdateRequest,
   FindComplaintsParams,
-} from '@/lib/types';
+} from "@/lib/types";
 
 // ===================================================================
 // Complaint CRUD Operations
@@ -21,7 +21,7 @@ import type {
 export const createComplaint = async (
   data: ComplaintsCreateRequest,
 ): Promise<ComplaintsDto> => {
-  const response = await apiClient.post<ComplaintsDto>('/complaints', data);
+  const response = await apiClient.post<ComplaintsDto>("/complaints", data);
   return response.data;
 };
 
@@ -34,9 +34,17 @@ export const createComplaint = async (
 export const getComplaints = async (
   params: FindComplaintsParams,
 ): Promise<ComplaintFindAllPageResponse> => {
+  // undefined와 null, 빈 문자열 값을 제거하되, false는 유효한 값이므로 유지
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(([_, value]) => {
+      if (typeof value === "boolean") return true; // false도 유효한 값
+      return value !== undefined && value !== null && value !== "";
+    }),
+  );
+
   const response = await apiClient.get<ComplaintFindAllPageResponse>(
-    '/complaints',
-    { params },
+    "/complaints",
+    { params: cleanParams },
   );
   return response.data;
 };
